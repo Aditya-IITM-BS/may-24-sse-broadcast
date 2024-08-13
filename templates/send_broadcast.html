@@ -28,16 +28,24 @@
 
         const eventSrc = new EventSource("/stream")
 
-        eventSrc.addEventListener(
-            "message",
-            function (e) {
-                const chatBox = document.querySelector('#chat-box')
-                const newMessage = document.createElement("h4")
-                data = JSON.parse(e.data)
-                newMessage.textContent = `${data.name}: ${data.msg}`
-                chatBox.appendChild(newMessage)
-            }
-        )
+        // eventSrc.addEventListener(
+        //     "message",
+        //     function (e) {
+        //         const chatBox = document.querySelector('#chat-box')
+        //         const newMessage = document.createElement("h4")
+        //         data = JSON.parse(e.data)
+        //         newMessage.textContent = `${data.name}: ${data.msg}`
+        //         chatBox.appendChild(newMessage)
+        //     }
+        // )
+
+        eventSrc.onmessage = (event) => {
+            const chatBox = document.querySelector('#chat-box')
+            const newMessage = document.createElement("h4")
+            data = JSON.parse(event.data)
+            newMessage.textContent = `${data.name}: ${data.msg}`
+            chatBox.appendChild(newMessage)
+        }
     </script>
 </body>
 

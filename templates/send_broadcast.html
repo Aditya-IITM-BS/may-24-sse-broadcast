@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Broadcast</title>
+</head>
+
+<body>
+    <div>
+        <h1>Send Broacast Message</h1>
+        <input id="input-name" placeholder="name" value="name">
+        <input id="input-msg" placeholder="message" value="msg">
+        <button onclick="sendMessage()">Broadcast Message</button>
+    </div>
+    <div id="chat-box">
+        <h2>Chat Box</h2>
+    </div>
+    <script>
+        async function sendMessage() {
+            name = document.querySelector('#input-name').value
+            msg = document.querySelector('#input-msg').value
+
+            res = await fetch(`/message/${name}/${msg}`)
+
+        }
+
+        const eventSrc = new EventSource("/stream")
+
+        eventSrc.addEventListener(
+            "message",
+            function (e) {
+                const chatBox = document.querySelector('#chat-box')
+                const newMessage = document.createElement("h4")
+                data = JSON.parse(e.data)
+                newMessage.textContent = `${data.name}: ${data.msg}`
+                chatBox.appendChild(newMessage)
+            }
+        )
+    </script>
+</body>
+
+</html>
